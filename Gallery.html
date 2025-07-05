@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Haven Bookstore - Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Calibri, sans-serif;
+            line-height: 1.6;
+            color: #131C26;
+            background-color: #FFF7EE;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #2E2E4E;
+            color: #FFF7EE;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #FFF7EE;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #3F5461;
+        }
+
+        .cart-icon {
+            background-color: #742C36;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #FFF7EE;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            background-color: #5C2E5C;
+        }
+
+        /* Main Content Styles */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #2E2E4E;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #3F5461;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filter-controls select, .filter-controls input {
+            padding: 0.5rem;
+            border: 2px solid #3F5461;
+            border-radius: 5px;
+            font-size: 1rem;
+            color: #131C26;
+        }
+
+        .filter-controls select:focus, .filter-controls input:focus {
+            outline: none;
+            border-color: #5C2E5C;
+        }
+
+        .filter-button {
+            background-color: #3E5641;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-button:hover {
+            background-color: #2E2E4E;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            max-width: 180px;
+            height: 240px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 3px solid #3F5461;
+        }
+
+        .gallery-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #2E2E4E;
+            font-weight: bold;
+        }
+
+        .gallery-item .author {
+            color: #5C2E5C;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-item .category {
+            background-color: #3E5641;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-item .description {
+            color: #131C26;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .gallery-item .price {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #742C36;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-item .actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .add-to-cart, .view-details {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-cart {
+            background-color: #742C36;
+            color: white;
+        }
+
+        .add-to-cart:hover {
+            background-color: #5C2E5C;
+        }
+
+        .view-details {
+            background-color: transparent;
+            color: #3F5461;
+            border: 2px solid #3F5461;
+        }
+
+        .view-details:hover {
+            background-color: #3F5461;
+            color: white;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #2E2E4E;
+            color: #FFF7EE;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #3F5461;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #FFF7EE;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: #3F5461;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-item .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="logo-placeholder.png" alt="Book Haven Bookstore Logo">
+                <span>Book Haven Bookstore</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="Gallery.html">Gallery</a></li>
+                    <li><a href="aboutUs.html">About Us</a></li>
+                    <li><a href="Community.html">Community</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="cart-icon" onclick="viewCart()">🛒 View Cart</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Our Collection</h1>
+            <p>Discover your next favorite book from our carefully curated selection</p>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-controls">
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="fiction">Fiction</option>
+                    <option value="non-fiction">Non-Fiction</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="romance">Romance</option>
+                    <option value="magazine">Magazines</option>
+                    <option value="supplies">Office Supplies</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Search by title or author...">
+                <button class="filter-button" onclick="applyFilters()">Filter</button>
+                <button class="filter-button" onclick="clearFilters()">Clear</button>
+            </div>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Books -->
+            <div class="gallery-item" data-category="fiction">
+                <img src="book-fiction-1.jpg" alt="Lorem Ipsum Novel">
+                <h3>Lorem Ipsum Novel</h3>
+                <div class="author">by Jane Doe</div>
+                <div class="category">Fiction</div>
+                <div class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+                <div class="price">$24.99</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Lorem Ipsum Novel', 24.99)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Lorem Ipsum Novel')">Details</button>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="mystery">
+                <img src="book-mystery-1.jpg" alt="Dolor Sit Mystery">
+                <h3>Dolor Sit Mystery</h3>
+                <div class="author">by John Smith</div>
+                <div class="category">Mystery</div>
+                <div class="description">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+                <div class="price">$19.99</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Dolor Sit Mystery', 19.99)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Dolor Sit Mystery')">Details</button>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="romance">
+                <img src="book-romance-1.jpg" alt="Consectetur Romance">
+                <h3>Consectetur Romance</h3>
+                <div class="author">by Emily Johnson</div>
+                <div class="category">Romance</div>
+                <div class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
+                <div class="price">$22.50</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Consectetur Romance', 22.50)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Consectetur Romance')">Details</button>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="non-fiction">
+                <img src="book-nonfiction-1.jpg" alt="Adipiscing Guide">
+                <h3>Adipiscing Guide</h3>
+                <div class="author">by Dr. Michael Brown</div>
+                <div class="category">Non-Fiction</div>
+                <div class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                <div class="price">$29.99</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Adipiscing Guide', 29.99)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Adipiscing Guide')">Details</button>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="fiction">
+                <img src="book-fiction-2.jpg" alt="Tempor Adventure">
+                <h3>Tempor Adventure</h3>
+                <div class="author">by Sarah Wilson</div>
+                <div class="category">Fiction</div>
+                <div class="description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</div>
+                <div class="price">$21.99</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Tempor Adventure', 21.99)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Tempor Adventure')">Details</button>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="mystery">
+                <img src="book-mystery-2.jpg" alt="Incididunt Thriller">
+                <h3>Incididunt Thriller</h3>
+                <div class="author">by Robert Davis</div>
+                <div class="category">Mystery</div>
+                <div class="description">Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.</div>
+                <div class="price">$26.50</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Incididunt Thriller', 26.50)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Incididunt Thriller')">Details</button>
+                </div>
+            </div>
+
+            <!-- Magazines -->
+            <div class="gallery-item" data-category="magazine">
+                <img src="magazine-1.jpg" alt="Literary Monthly">
+                <h3>Literary Monthly</h3>
+                <div class="author">Current Issue</div>
+                <div class="category">Magazine</div>
+                <div class="description">The latest trends in literature, author interviews, and book recommendations for passionate readers.</div>
+                <div class="price">$8.99</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Literary Monthly', 8.99)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Literary Monthly')">Details</button>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="magazine">
+                <img src="magazine-2.jpg" alt="Book Review Digest">
+                <h3>Book Review Digest</h3>
+                <div class="author">Weekly Edition</div>
+                <div class="category">Magazine</div>
+                <div class="description">Comprehensive reviews of the latest releases across all genres, helping you choose your next read.</div>
+                <div class="price">$6.99</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Book Review Digest', 6.99)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Book Review Digest')">Details</button>
+                </div>
+            </div>
+
+            <!-- Office Supplies -->
+            <div class="gallery-item" data-category="supplies">
+                <img src="supplies-notebook.jpg" alt="Premium Journal">
+                <h3>Premium Journal</h3>
+                <div class="author">Book Haven Brand</div>
+                <div class="category">Office Supplies</div>
+                <div class="description">High-quality lined journal perfect for writing, note-taking, or creative projects. 200 pages of premium paper.</div>
+                <div class="price">$15.99</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Premium Journal', 15.99)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Premium Journal')">Details</button>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="supplies">
+                <img src="supplies-pens.jpg" alt="Writer's Pen Set">
+                <h3>Writer's Pen Set</h3>
+                <div class="author">Book Haven Brand</div>
+                <div class="category">Office Supplies</div>
+                <div class="description">Professional set of gel pens in assorted colors, perfect for writing, editing, and creative work.</div>
+                <div class="price">$12.99</div>
+                <div class="actions">
+                    <button class="add-to-cart" onclick="addToCart('Writer\'s Pen Set', 12.99)">Add to Cart</button>
+                    <button class="view-details" onclick="viewDetails('Writer\'s Pen Set')">Details</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <p>📍 123 Main Street, Your City, State 12345</p>
+                <p>📞 (555) 123-4567</p>
+                <p>✉️ info@bookhavenbookstore.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Store Hours</h3>
+                <p>Monday–Friday: 9 a.m. to 8 p.m.</p>
+                <p>Saturday: 10 a.m. to 6 p.m.</p>
+                <p>Sunday: 11 a.m. to 5 p.m.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="Gallery.html">Gallery</a>
+                <a href="aboutUs.html">About Us</a>
+                <a href="Community.html">Community</a>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <p>Stay connected for the latest updates</p>
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple shopping cart functionality
+        let cart = [];
+
+        function addToCart(itemTitle, price) {
+            cart.push({title: itemTitle, price: price});
+            alert(`"${itemTitle}" added to cart!`);
+            console.log('Current cart:', cart);
+        }
+
+        function viewCart() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            let cartContents = 'Your Cart:\n';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                cartContents += `${index + 1}. ${item.title} - $${item.price.toFixed(2)}\n`;
+                total += item.price;
+            });
+            
+            cartContents += `\nTotal: $${total.toFixed(2)}`;
+            
+            if (confirm(cartContents + '\n\nWould you like to proceed to checkout?')) {
+                alert('Thank you for your order!');
+                cart = [];
+            }
+        }
+
+        function viewDetails(itemTitle) {
+            alert(`Viewing details for: ${itemTitle}\n\nMore detailed information would be displayed here in a full implementation.`);
+        }
+
+        // Filter functionality
+        function applyFilters() {
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.gallery-item');
+
+            items.forEach(item => {
+                const category = item.getAttribute('data-category');
+                const title = item.querySelector('h3').textContent.toLowerCase();
+                const author = item.querySelector('.author').textContent.toLowerCase();
+
+                const categoryMatch = categoryFilter === 'all' || category === categoryFilter;
+                const searchMatch = searchInput === '' || title.includes(searchInput) || author.includes(searchInput);
+
+                if (categoryMatch && searchMatch) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('searchInput').value = '';
+            
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                item.style.display = 'block';
+            });
+        }
+
+        // Add event listeners for real-time search
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+    </script> 
+    // test
+</body>
+</html>
