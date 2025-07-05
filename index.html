@@ -310,6 +310,73 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* Cart Controls Container */
+        .cart-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        /* Updated Cart Icon Button */
+        .cart-icon {
+            background-color: #742C36;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #FFF7EE;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            background-color: #5C2E5C;
+        }
+
+        /* Clear Cart Button */
+        .clear-cart-btn {
+            background-color: #3E5641;
+            color: #FFF7EE;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: background-color 0.3s ease;
+        }
+
+        .clear-cart-btn:hover {
+            background-color: #2E2E4E;
+        }
+
+        /* Responsive adjustments for cart controls */
+        @media (max-width: 768px) {
+            .cart-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+            }
+    
+            .cart-icon, .clear-cart-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cart-controls {
+                margin-top: 1rem;
+            }
+    
+            .cart-icon, .clear-cart-btn {
+                padding: 0.7rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -327,7 +394,11 @@
                     <li><a href="Community.html">Community</a></li>
                 </ul>
             </nav>
-            <a href="#" class="cart-icon" onclick="viewCart()">🛒 View Cart</a>
+            
+            <div class="cart-controls">
+                <button class="cart-icon" onclick="showDetailedCart()">🛒 View Cart</button>
+                <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
+            </div>
         </div>
     </header>
 
@@ -435,12 +506,12 @@
     </footer>
 
     <script>
-        // Simple shopping cart functionality
         let cart = [];
 
-        function addToCart(bookTitle, price) {
-            cart.push({title: bookTitle, price: price});
-            alert(`"${bookTitle}" added to cart!`);
+        function addToCart(itemTitle, price) {
+            cart.push({title: itemTitle, price: price});
+            alert(`"${itemTitle}" added to cart!`);
+            updateCartDisplay();
             console.log('Current cart:', cart);
         }
 
@@ -449,22 +520,137 @@
                 alert('Your cart is empty');
                 return;
             }
-            
+    
             let cartContents = 'Your Cart:\n';
             let total = 0;
-            
+    
             cart.forEach((item, index) => {
                 cartContents += `${index + 1}. ${item.title} - $${item.price.toFixed(2)}\n`;
                 total += item.price;
             });
-            
+    
             cartContents += `\nTotal: $${total.toFixed(2)}`;
-            
+            cartContents += '\n\nOptions:';
+            cartContents += '\n• Click OK to proceed to checkout';
+            cartContents += '\n• Click Cancel to continue shopping';
+            cartContents += '\n• Use "Clear Cart" button to empty cart';
+    
             if (confirm(cartContents + '\n\nWould you like to proceed to checkout?')) {
                 alert('Thank you for your order!');
-                cart = [];
+                clearCart();
             }
         }
+
+        function clearCart() {
+            if (cart.length === 0) {
+                alert('Your cart is already empty');
+                return;
+            }
+    
+            if (confirm('Are you sure you want to clear your cart? This action cannot be undone.')) {
+                cart = [];
+                alert('Cart cleared successfully!');
+                updateCartDisplay();
+                console.log('Cart cleared');
+            }
+        }
+
+        function removeFromCart(index) {
+            if (index >= 0 && index < cart.length) {
+                const removedItem = cart.splice(index, 1)[0];
+                alert(`"${removedItem.title}" removed from cart`);
+                updateCartDisplay();
+            }
+        }
+
+        function updateCartDisplay() {
+            // Update cart icon with item count
+            const cartIcon = document.querySelector('.cart-icon');
+            if (cartIcon) {
+                const itemCount = cart.length;
+                if (itemCount > 0) {
+                    cartIcon.innerHTML = `🛒 Cart (${itemCount})`;
+                } else {
+                    cartIcon.innerHTML = '🛒 View Cart';
+                }
+            }
+        }
+
+        // Advanced cart view with individual item management
+        function showDetailedCart() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+
+            let cartHTML = `
+                <div style="background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h3 style="color: #2E2E4E; margin-bottom: 15px;">Shopping Cart</h3>
+            `;
+    
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                cartHTML += `
+                    <div style="border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${item.title}</strong><br>
+                            <span style="color: #742C36; font-weight: bold;">$${item.price.toFixed(2)}</span>
+                        </div>
+                        <button onclick="removeFromCart(${index})" style="background: #742C36; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
+                    </div>
+                `;
+            });
+    
+            cartHTML += `
+                    <div style="margin-top: 15px; text-align: center;">
+                        <strong style="font-size: 1.2em; color: #2E2E4E;">Total: $${total.toFixed(2)}</strong>
+                    </div>
+                    <div style="margin-top: 20px; text-align: center; display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="proceedToCheckout()" style="background: #3E5641; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Checkout</button>
+                        <button onclick="clearCart()" style="background: #742C36; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Clear Cart</button>
+                        <button onclick="closeCartModal()" style="background: #3F5461; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Continue Shopping</button>
+                    </div>
+                </div>
+            `;
+    
+            // Create modal overlay
+            const modal = document.createElement('div');
+            modal.id = 'cartModal';
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1000; display: flex; 
+                align-items: center; justify-content: center;
+            `;
+            modal.innerHTML = cartHTML;
+
+            document.body.appendChild(modal);
+    
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeCartModal();
+                }
+            });
+        }
+
+        function closeCartModal() {
+            const modal = document.getElementById('cartModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function proceedToCheckout() {
+            alert('Thank you for your order!');
+            clearCart();
+            closeCartModal();
+        }
+
+        // Initialize cart display when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartDisplay();
+        });
     </script>
 </body>
 </html>
