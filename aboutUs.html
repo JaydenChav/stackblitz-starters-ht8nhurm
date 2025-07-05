@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Haven Bookstore - About Us</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Calibri, sans-serif;
+            line-height: 1.6;
+            color: #131C26;
+            background-color: #FFF7EE;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #2E2E4E;
+            color: #FFF7EE;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #FFF7EE;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #3F5461;
+        }
+
+        .cart-icon {
+            background-color: #742C36;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #FFF7EE;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            background-color: #5C2E5C;
+        }
+
+        /* Main Content Styles */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #2E2E4E;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #3F5461;
+        }
+
+        /* Content Sections */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .content-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .content-section h2 {
+            font-size: 1.8rem;
+            color: #2E2E4E;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .content-section h3 {
+            font-size: 1.3rem;
+            color: #5C2E5C;
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .content-section p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .hours-list {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .hours-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        .contact-info {
+            list-style: none;
+        }
+
+        .contact-info li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-info .icon {
+            color: #742C36;
+            font-weight: bold;
+        }
+
+        /* Form Styles */
+        .form-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-section h2 {
+            font-size: 1.8rem;
+            color: #2E2E4E;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .form-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2E2E4E;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 2px solid #3F5461;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #5C2E5C;
+        }
+
+        .form-group input:invalid {
+            border-color: #742C36;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .fieldset {
+            border: 2px solid #3F5461;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .fieldset legend {
+            font-weight: bold;
+            color: #2E2E4E;
+            padding: 0 0.5rem;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .submit-button {
+            background-color: #742C36;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-button:hover {
+            background-color: #5C2E5C;
+        }
+
+        .reset-button {
+            background-color: #3E5641;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+            margin-left: 1rem;
+        }
+
+        .reset-button:hover {
+            background-color: #2E2E4E;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #2E2E4E;
+            color: #FFF7EE;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #3F5461;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #FFF7EE;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: #3F5461;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="logo-placeholder.png" alt="Book Haven Bookstore Logo">
+                <span>Book Haven Bookstore</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="community.html">Community</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="cart-icon" onclick="viewCart()">🛒 View Cart</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>About Us</h1>
+            <p>Learn more about Book Haven Bookstore and get in touch with us</p>
+        </div>
+
+        <div class="content-grid">
+            <div class="content-section">
+                <h2>About Book Haven</h2>
+                <p>Book Haven Bookstore is a local treasure for book enthusiasts, offering a diverse selection of books, magazines, journals, and office supplies. With a deep-rooted commitment to fostering literary exploration and a love for reading, we are dedicated to creating an inviting space that encourages literary discovery and supports intellectual growth.</p>
+                
+                <p>Our mission is to amplify visibility for great literature, cultivate a vibrant literary community, and simplify the process of book inquiries and purchases. We serve a broad audience of book lovers and knowledge seekers, including avid readers, students, and individuals in search of high-quality reading materials and office essentials.</p>
+
+                <h3>Our Values</h3>
+                <p>We believe in the transformative power of books and are committed to:</p>
+                <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                    <li>Promoting literacy and lifelong learning</li>
+                    <li>Supporting local authors and publishers</li>
+                    <li>Creating an inclusive community space</li>
+                    <li>Providing exceptional customer service</li>
+                </ul>
+
+                <h3>Our Story</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+
+            <div class="content-section">
+                <h2>Visit Our Store</h2>
+                
+                <h3>Store Hours</h3>
+                <ul class="hours-list">
+                    <li><span>Monday</span><span>9:00 AM - 8:00 PM</span></li>
+                    <li><span>Tuesday</span><span>9:00 AM - 8:00 PM</span></li>
+                    <li><span>Wednesday</span><span>9:00 AM - 8:00 PM</span></li>
+                    <li><span>Thursday</span><span>9:00 AM - 8:00 PM</span></li>
+                    <li><span>Friday</span><span>9:00 AM - 8:00 PM</span></li>
+                    <li><span>Saturday</span><span>10:00 AM - 6:00 PM</span></li>
+                    <li><span>Sunday</span><span>11:00 AM - 5:00 PM</span></li>
+                </ul>
+
+                <h3>Contact Information</h3>
+                <ul class="contact-info">
+                    <li><span class="icon">📍</span> 123 Main Street, Your City, State 12345</li>
+                    <li><span class="icon">📞</span> (555) 123-4567</li>
+                    <li><span class="icon">✉️</span> info@bookhavenbookstore.com</li>
+                    <li><span class="icon">🌐</span> www.bookhavenbookstore.com</li>
+                </ul>
+
+                <h3>Location Details</h3>
+                <p>We're conveniently located in the heart of downtown, with easy parking available both on the street and in the nearby public parking garage. Our store is wheelchair accessible and we welcome service animals.</p>
+
+                <p>Public transportation options include Bus Routes 15, 22, and 34, all with stops within two blocks of our store.</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Contact Us & Custom Orders</h2>
+            <form id="contactForm" action="#" method="post">
+                <div class="form-grid">
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter your first name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="frequency">How many days per week do you visit the shop? *</label>
+                            <input type="number" id="frequency" name="frequency" min="0" max="7" placeholder="0-7" required>
+                        </div>
+                    </div>
+
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="inquiryType">Type of Inquiry</label>
+                            <select id="inquiryType" name="inquiryType">
+                                <option value="">Select an option</option>
+                                <option value="general">General Question</option>
+                                <option value="book-request">Book Request</option>
+                                <option value="custom-order">Custom Order</option>
+                                <option value="event">Event Information</option>
+                                <option value="feedback">Feedback</option>
+                            </select>
+                        </div>
+
+                        <fieldset class="fieldset">
+                            <legend>Preferred Contact Method</legend>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="contactEmail" name="contactMethod" value="email">
+                                    <label for="contactEmail">Email</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="contactPhone" name="contactMethod" value="phone">
+                                    <label for="contactPhone">Phone</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="contactEither" name="contactMethod" value="either" checked>
+                                    <label for="contactEither">Either</label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+                            <legend>Areas of Interest</legend>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="fiction" name="interests" value="fiction">
+                                    <label for="fiction">Fiction</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="nonfiction" name="interests" value="nonfiction">
+                                    <label for="nonfiction">Non-Fiction</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="mystery" name="interests" value="mystery">
+                                    <label for="mystery">Mystery/Thriller</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="romance" name="interests" value="romance">
+                                    <label for="romance">Romance</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="magazines" name="interests" value="magazines">
+                                    <label for="magazines">Magazines</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="supplies" name="interests" value="supplies">
+                                    <label for="supplies">Office Supplies</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="comments">Comments or Custom Order Details *</label>
+                    <textarea id="comments" name="comments" placeholder="Please provide details about your inquiry, custom order request, or feedback. For book requests, include title, author, and any specific edition preferences." required></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="newsletter">
+                        <input type="checkbox" id="newsletter" name="newsletter" value="yes">
+                        Subscribe to our newsletter for updates on new arrivals and events
+                    </label>
+                </div>
+
+                <div class="full-width">
+                    <button type="submit" class="submit-button">Submit</button>
+                    <button type="reset" class="reset-button">Clear Form</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <p>📍 123 Main Street, Your City, State 12345</p>
+                <p>📞 (555) 123-4567</p>
+                <p>✉️ info@bookhavenbookstore.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Store Hours</h3>
+                <p>Monday–Friday: 9 a.m. to 8 p.m.</p>
+                <p>Saturday: 10 a.m. to 6 p.m.</p>
+                <p>Sunday: 11 a.m. to 5 p.m.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="about.html">About Us</a>
+                <a href="community.html">Community</a>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <p>Stay connected for the latest updates</p>
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple shopping cart functionality
+        let cart = [];
+
+        function viewCart() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            let cartContents = 'Your Cart:\n';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                cartContents += `${index + 1}. ${item.title} - $${item.price.toFixed(2)}\n`;
+                total += item.price;
+            });
+            
+            cartContents += `\nTotal: $${total.toFixed(2)}`;
+            
+            if (confirm(cartContents + '\n\nWould you like to proceed to checkout?')) {
+                alert('Thank you for your order!');
+                cart = [];
+            }
+        }
+
+        // Form submission handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simple validation check
+            if (!data.lastName || !data.email || !data.frequency || !data.comments) {
+                alert('Please fill in all required fields (marked with *)');
+                return;
+            }
+            
+            // Simulate form submission
+            alert('Thank you for contacting us! We will respond to your inquiry within 24 hours.');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Real-time validation for number input
+        document.getElementById('frequency').addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (value < 0 || value > 7) {
+                this.setCustomValidity('Please enter a number between 0 and 7');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+</body>
+</html>
