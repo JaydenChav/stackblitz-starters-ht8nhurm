@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Haven Bookstore - Community</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Calibri, sans-serif;
+            line-height: 1.6;
+            color: #131C26;
+            background-color: #FFF7EE;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #2E2E4E;
+            color: #FFF7EE;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #FFF7EE;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #3F5461;
+        }
+
+        .cart-icon {
+            background-color: #742C36;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #FFF7EE;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            background-color: #5C2E5C;
+        }
+
+        /* Main Content Styles */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #2E2E4E;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #3F5461;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #2E2E4E;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Customer Spotlight */
+        .spotlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .spotlight-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #5C2E5C;
+            transition: transform 0.3s ease;
+        }
+
+        .spotlight-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .spotlight-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .spotlight-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #3F5461;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .spotlight-info h3 {
+            color: #2E2E4E;
+            margin-bottom: 0.3rem;
+        }
+
+        .spotlight-info .title {
+            color: #5C2E5C;
+            font-style: italic;
+        }
+
+        .spotlight-quote {
+            font-style: italic;
+            color: #131C26;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .spotlight-rating {
+            color: #742C36;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .spotlight-book {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            border-left: 3px solid #3E5641;
+        }
+
+        .spotlight-book strong {
+            color: #2E2E4E;
+        }
+
+        /* Events Section */
+        .events-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .events-list {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .event-item {
+            border-bottom: 1px solid #e9ecef;
+            padding: 1.5rem 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .event-item:last-child {
+            border-bottom: none;
+        }
+
+        .event-date {
+            background-color: #2E2E4E;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .event-date .month {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .event-date .day {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .event-details h4 {
+            color: #2E2E4E;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .event-details .time {
+            color: #5C2E5C;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-details .description {
+            color: #131C26;
+            line-height: 1.5;
+        }
+
+        .event-rsvp {
+            background-color: #3E5641;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-rsvp:hover {
+            background-color: #742C36;
+        }
+
+        /* Community Stats */
+        .community-stats {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #742C36;
+            display: block;
+        }
+
+        .stat-label {
+            color: #131C26;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Collaborations Section */
+        .collaborations {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .collaboration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .collaboration-card {
+            text-align: center;
+            padding: 1.5rem;
+            border: 2px solid #3F5461;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .collaboration-card:hover {
+            border-color: #5C2E5C;
+            background-color: #f8f9fa;
+        }
+
+        .collaboration-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+
+        .collaboration-card h4 {
+            color: #2E2E4E;
+            margin-bottom: 0.5rem;
+        }
+
+        .collaboration-card .type {
+            color: #5C2E5C;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .collaboration-card p {
+            color: #131C26;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Newsletter Signup */
+        .newsletter-signup {
+            background: linear-gradient(135deg, #2E2E4E, #5C2E5C);
+            color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .newsletter-signup h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .newsletter-signup p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .newsletter-form button {
+            background-color: #742C36;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background-color: #3E5641;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #2E2E4E;
+            color: #FFF7EE;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #3F5461;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #FFF7EE;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: #3F5461;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .spotlight-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .events-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .event-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .event-date {
+                align-self: center;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .spotlight-card, .events-list, .community-stats, .collaborations {
+                padding: 1.5rem;
+            }
+
+            .collaboration-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="logo-placeholder.png" alt="Book Haven Bookstore Logo">
+                <span>Book Haven Bookstore</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="community.html">Community</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="cart-icon" onclick="viewCart()">🛒 View Cart</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Our Community</h1>
+            <p>Connecting book lovers and fostering a vibrant literary community</p>
+        </div>
+
+        <!-- Customer Spotlight Section -->
+        <section class="section">
+            <h2 class="section-title">Customer Spotlight</h2>
+            <div class="spotlight-grid">
+                <div class="spotlight-card">
+                    <div class="spotlight-header">
+                        <div class="spotlight-avatar">JD</div>
+                        <div class="spotlight-info">
+                            <h3>Jane Doe</h3>
+                            <div class="title">Regular Customer</div>
+                        </div>
+                    </div>
+                    <div class="spotlight-quote">
+                        "Book Haven has been my literary sanctuary for over three years. The staff's recommendations are always spot-on, and the community events have introduced me to so many wonderful authors and fellow readers."
+                    </div>
+                    <div class="spotlight-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="spotlight-book">
+                        <strong>Recent Purchase:</strong> "Lorem Ipsum Chronicles" - A fascinating journey through contemporary literature that Jane discovered through our book club.
+                    </div>
+                </div>
+
+                <div class="spotlight-card">
+                    <div class="spotlight-header">
+                        <div class="spotlight-avatar">MS</div>
+                        <div class="spotlight-info">
+                            <h3>Michael Smith</h3>
+                            <div class="title">Book Club Member</div>
+                        </div>
+                    </div>
+                    <div class="spotlight-quote">
+                        "The monthly book discussions have enriched my reading experience tremendously. It's amazing how different perspectives can completely change your understanding of a story."
+                    </div>
+                    <div class="spotlight-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="spotlight-book">
+                        <strong>Current Read:</strong> "Dolor Sit Adventure" - Michael's current book club selection that has sparked fascinating discussions about modern storytelling.
+                    </div>
+                </div>
+
+                <div class="spotlight-card">
+                    <div class="spotlight-header">
+                        <div class="spotlight-avatar">EJ</div>
+                        <div class="spotlight-info">
+                            <h3>Emily Johnson</h3>
+                            <div class="title">Local Author</div>
+                        </div>
+                    </div>
+                    <div class="spotlight-quote">
+                        "Book Haven gave me my first opportunity to connect with readers. Their author events and book signings have been instrumental in building my readership and getting valuable feedback."
+                    </div>
+                    <div class="spotlight-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="spotlight-book">
+                        <strong>Latest Work:</strong> "Consectetur Mystery" - Emily's latest mystery novel that premiered at our store and has become a local bestseller.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Events Section -->
+        <section class="section">
+            <h2 class="section-title">Events and Collaborations</h2>
+            <div class="events-container">
+                <div class="events-list">
+                    <h3 style="color: #2E2E4E; margin-bottom: 1.5rem;">Upcoming Events</h3>
+                    
+                    <div class="event-item">
+                        <div class="event-date">
+                            <div class="month">JUL</div>
+                            <div class="day">15</div>
+                        </div>
+                        <div class="event-details">
+                            <h4>Monthly Book Club: "Adipiscing Classic"</h4>
+                            <div class="time">7:00 PM - 8:30 PM</div>
+                            <div class="description">Join our monthly discussion of contemporary classics. This month we're exploring themes of identity and belonging in modern literature. Light refreshments provided.</div>
+                            <button class="event-rsvp" onclick="rsvpEvent('Book Club')">RSVP</button>
+                        </div>
+                    </div>
+
+                    <div class="event-item">
+                        <div class="event-date">
+                            <div class="month">JUL</div>
+                            <div class="day">22</div>
+                        </div>
+                        <div class="event-details">
+                            <h4>Author Reading: Local Writers Showcase</h4>
+                            <div class="time">6:00 PM - 8:00 PM</div>
+                            <div class="description">An evening featuring three local authors reading from their latest works. Meet the authors, get books signed, and support local literary talent.</div>
+                            <button class="event-rsvp" onclick="rsvpEvent('Author Reading')">RSVP</button>
+                        </div>
+                    </div>
+
+                    <div class="event-item">
+                        <div class="event-date">
+                            <div class="month">AUG</div>
+                            <div class="day">05</div>
+                        </div>
+                        <div class="event-details">
+                            <h4>Children's Story Time</h4>
+                            <div class="time">10:00 AM - 11:00 AM</div>
+                            <div class="description">Interactive storytelling session for children ages 3-8. Featuring "Tempor Tales" and hands-on activities. Parents and guardians welcome.</div>
+                            <button class="event-rsvp" onclick="rsvpEvent('Story Time')">RSVP</button>
+                        </div>
+                    </div>
+
+                    <div class="event-item">
+                        <div class="event-date">
+                            <div class="month">AUG</div>
+                            <div class="day">12</div>
+                        </div>
+                        <div class="event-details">
+                            <h4>Writing Workshop: "Crafting Your First Chapter"</h4>
+                            <div class="time">2:00 PM - 4:00 PM</div>
+                            <div class="description">Workshop for aspiring writers focusing on compelling openings and character development. Led by published author and writing coach Sarah Wilson.</div>
+                            <button class="event-rsvp" onclick="rsvpEvent('Writing Workshop')">RSVP</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="community-stats">
+                    <h3 style="color: #2E2E4E; margin-bottom: 1.5rem; text-align: center;">Community Stats</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number">2,847</span>
+                            <div class="stat-label">Community Members</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">156</span>
+                            <div class="stat-label">Events This Year</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">89</span>
+                            <div class="stat-label">Book Club Sessions</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">34</span>
+                            <div class="stat-label">Local Authors Featured</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">1,250</span>
+                            <div class="stat-label">Books Discussed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collaborations Section -->
+        <section class="section">
+            <div class="collaborations">
+                <h3 style="color: #2E2E4E; margin-bottom: 2rem; text-align: center;">Community Partnerships</h3>
+                <div class="collaboration-grid">
+                    <div class="collaboration-card">
+                        <img src="library-logo.jpg" alt="City Library">
+                        <h4>City Public Library</h4>
+                        <div class="type">Educational Partner</div>
+                        <p>Collaborative programs including literacy workshops, reading challenges, and shared community events promoting lifelong learning and reading accessibility.</p>
+                    </div>
+                    
+                    <div class="collaboration-card">
+                        <img src="university-logo.jpg" alt="Local University">
+                        <h4>Local University</h4>
+                        <div class="type">Academic Partnership</div>
+                        <p>Supporting student literary events, hosting graduate readings, and providing internship opportunities for English and Literature students.</p>
+                    </div>
+                    
+                    <div class="collaboration-card">
+                        <img src="writers-guild-logo.jpg" alt="Writers Guild">
+                        <h4>Regional Writers Guild</h4>
+                        <div class="type">Professional Network</div>
+                        <p>Monthly workshops, manuscript review sessions, and networking events connecting established and emerging writers in our literary community.</p>
+                    </div>
+                    
+                    <div class="collaboration-card">
+                        <img src="cafe-logo.jpg" alt="Literary Cafe">
+                        <h4>Corner Literary Café</h4>
+                        <div class="type">Community Venue</div>
+                        <p>Joint events combining literature and local cuisine, poetry nights, and intimate book discussions in a cozy atmosphere perfect for literary gatherings.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Signup -->
+        <section class="newsletter-signup">
+            <h3>Stay Connected with Our Community</h3>
+            <p>Get updates on upcoming events, new arrivals, and exclusive community member benefits</p>
+            <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Contact Information</h3>
+                <p>📍 123 Main Street, Your City, State 12345</p>
+                <p>📞 (555) 123-4567</p>
+                <p>✉️ info@bookhavenbookstore.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Store Hours</h3>
+                <p>Monday–Friday: 9 a.m. to 8 p.m.</p>
+                <p>Saturday: 10 a.m. to 6 p.m.</p>
+                <p>Sunday: 11 a.m. to 5 p.m.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="about.html">About Us</a>
+                <a href="community.html">Community</a>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <p>Stay connected for the latest updates</p>
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple shopping cart functionality
+        let cart = [];
+
+        function viewCart() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            let cartContents = 'Your Cart:\n';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                cartContents += `${index + 1}. ${item.title} - $${item.price.toFixed(2)}\n`;
+                total += item.price;
+            });
+            
+            cartContents += `\nTotal: $${total.toFixed(2)}`;
+            
+            if (confirm(cartContents + '\n\nWould you like to proceed to checkout?')) {
+                alert('Thank you for your order!');
+                cart = [];
+            }
+        }
+
+        // Event RSVP functionality
+        function rsvpEvent(eventName) {
+            alert(`Thank you for your interest in "${eventName}"! We'll send you a confirmation email with event details and any materials you might need to prepare.`);
+        }
+
+        // Newsletter subscription
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            alert(`Thank you for subscribing to our community newsletter! You'll receive updates at ${email}.`);
+            event.target.reset();
+        }
+
+        // Simulate dynamic stats (would be real data in production)
+        function updateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const currentValue = parseInt(stat.textContent.replace(',', ''));
+                const increment = Math.floor(Math.random() * 3) + 1;
+                const newValue = currentValue + increment;
+                stat.textContent = newValue.toLocaleString();
+            });
+        }
+
+        // Update stats every 30 seconds (for demo purposes)
+        setInterval(updateStats, 30000);
+    </script>
+</body>
+</html>
