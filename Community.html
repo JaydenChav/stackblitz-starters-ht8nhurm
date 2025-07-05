@@ -966,15 +966,89 @@
 
         // Event RSVP functionality
         function rsvpEvent(eventName) {
-            alert(`Thank you for your interest in "${eventName}"! We'll send you a confirmation email with event details and any materials you might need to prepare.`);
+            const rsvpData = {
+                eventName: eventName,
+                rsvpedAt: new Date().toISOString(),
+                submissionType: 'event-rsvp'
+            };
+    
+            try {
+                // Get existing RSVPs
+                let rsvps = JSON.parse(localStorage.getItem('eventRSVPs') || '[]');
+        
+                // Check if already RSVP'd for this event
+                const existingRSVP = rsvps.find(rsvp => rsvp.eventName === eventName);
+               if (existingRSVP) {
+                    alert(`You have already RSVP'd for "${eventName}"`);
+                    return;
+                }
+        
+                // Add new RSVP
+                rsvps.push(rsvpData);
+        
+                // Store back to localStorage
+                localStorage.setItem('eventRSVPs', JSON.stringify(rsvps));
+        
+                // Store with unique key
+                const rsvpKey = `rsvp_${eventName.replace(/\s+/g, '_')}_${Date.now()}`;
+                localStorage.setItem(rsvpKey, JSON.stringify(rsvpData));
+        
+                alert(`Thank you for your interest in "${eventName}"! We'll send you a confirmation email with event details.`);
+                console.log('RSVP saved:', rsvpData);
+        
+            } catch (error) {
+                console.error('Error saving RSVP:', error);
+                alert('There was an error with your RSVP. Please try again.');
+            }
         }
 
         // Newsletter subscription
         function subscribeNewsletter(event) {
             event.preventDefault();
             const email = event.target.querySelector('input[type="email"]').value;
-            alert(`Thank you for subscribing to our community newsletter! You'll receive updates at ${email}.`);
-            event.target.reset();
+    
+            if (!email) {
+                alert('Please enter a valid email address');
+                return;
+            }
+    
+            const newsletterData = {
+                email: email,
+                subscribedAt: new Date().toISOString(),
+                submissionType: 'newsletter-signup',
+                source: 'community-page'
+           };
+    
+            try {
+                // Get existing newsletter subscribers
+                let newsletters = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
+        
+                // Check if email already exists
+                const existingSubscription = newsletters.find(sub => sub.email === email);
+                if (existingSubscription) {
+                    alert('This email is already subscribed to our newsletter!');
+                    return;
+                }
+        
+                // Add new subscription
+                newsletters.push(newsletterData);
+        
+                // Store back to localStorage
+                localStorage.setItem('newsletterSubscriptions', JSON.stringify(newsletters));
+        
+                // Also store with unique key
+                const subscriptionKey = `newsletter_${email.replace('@', '_').replace('.', '_')}_${Date.now()}`;
+                localStorage.setItem(subscriptionKey, JSON.stringify(newsletterData));
+        
+                alert(`Thank you for subscribing to our community newsletter! You'll receive updates at ${email}.`);
+                console.log('Newsletter subscription saved:', newsletterData);
+        
+                event.target.reset();
+        
+            } catch (error) {
+                console.error('Error saving newsletter subscription:', error);
+                alert('There was an error with your subscription. Please try again.');
+            }
         }
 
         // Simulate dynamic stats (would be real data in production)
@@ -988,6 +1062,59 @@
             });
         }
         setInterval(updateStats, 30000);
+
+        // Function to view all stored submissions (for testing/admin purposes)
+        function viewAllSubmissions() {
+           console.log('=== ALL STORED DATA ===');
+        
+           // Contact Form Submissions
+           const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
+           console.log('Contact Form Submissions:', submissions);
+        
+           // Newsletter Subscriptions
+          const newsletters = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
+          console.log('Newsletter Subscriptions:', newsletters);
+        
+           // Event RSVPs
+          const rsvps = JSON.parse(localStorage.getItem('eventRSVPs') || '[]');
+          console.log('Event RSVPs:', rsvps);
+        
+           // All localStorage keys
+            console.log('All localStorage keys:', Object.keys(localStorage));
+        
+            return {
+                contactSubmissions: submissions,
+                newsletterSubscriptions: newsletters,
+                eventRSVPs: rsvps,
+                totalItems: Object.keys(localStorage).length
+            };
+        }
+
+        // Function to clear all form data (for testing)
+        function clearAllFormData() {
+           if (confirm('Are you sure you want to clear all stored form data? This cannot be undone.')) {
+                const keysToRemove = [];
+            
+               // Find all form-related keys
+                for (let i = 0; i < localStorage.length; i++) {
+                   const key = localStorage.key(i);
+                   if (key.includes('contact_') || key.includes('newsletter_') || key.includes('rsvp_') || 
+                        key === 'formSubmissions' || key === 'newsletterSubscriptions' || key === 'eventRSVPs') {
+                       keysToRemove.push(key);
+                    }
+               }
+            
+                // Remove all form-related data
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+            
+               alert(`Cleared ${keysToRemove.length} form data items from localStorage`);
+               console.log('Cleared keys:', keysToRemove);
+            }
+        }
+
+       // Add these functions to window for easy testing in console
+       window.viewAllSubmissions = viewAllSubmissions;
+       window.clearAllFormData = clearAllFormData;
     </script>
 </body>
 </html>

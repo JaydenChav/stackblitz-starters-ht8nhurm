@@ -864,6 +864,115 @@
                 this.setCustomValidity('');
             }
         });
+
+        // Contact Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+    
+            // Get form data
+            const formData = new FormData(this);
+            const data = {};
+    
+            // Convert FormData to regular object
+            for (let [key, value] of formData.entries()) {
+                if (key === 'interests') {
+                    // Handle multiple checkboxes
+                    if (!data[key]) data[key] = [];
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+    
+            // Add timestamp
+            data.submittedAt = new Date().toISOString();
+            data.submissionType = 'contact-form';
+    
+            // Simple validation check
+            if (!data.lastName || !data.email || !data.frequency || !data.comments) {
+                alert('Please fill in all required fields (marked with *)');
+                return;
+            }
+    
+            // Store in localStorage
+            try {
+                // Get existing submissions or create empty array
+                let submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
+        
+                // Add new submission
+                submissions.push(data);
+        
+                // Store back to localStorage
+                localStorage.setItem('formSubmissions', JSON.stringify(submissions));
+        
+                // Also store this specific submission with a unique key
+                const submissionKey = `contact_${data.lastName}_${Date.now()}`;
+                localStorage.setItem(submissionKey, JSON.stringify(data));
+        
+                alert('Thank you for contacting us! Your submission has been saved. We will respond within 24 hours.');
+                console.log('Form data saved to localStorage:', data);
+        
+                // Reset form
+                this.reset();
+        
+            } catch (error) {
+                console.error('Error saving to localStorage:', error);
+                alert('There was an error saving your submission. Please try again.');
+            }
+        });
+
+        // Function to view all stored submissions (for testing/admin purposes)
+        function viewAllSubmissions() {
+            console.log('=== ALL STORED DATA ===');
+        
+            // Contact Form Submissions
+            const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
+            console.log('Contact Form Submissions:', submissions);
+        
+            // Newsletter Subscriptions
+            const newsletters = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
+            console.log('Newsletter Subscriptions:', newsletters);
+        
+            // Event RSVPs
+            const rsvps = JSON.parse(localStorage.getItem('eventRSVPs') || '[]');
+            console.log('Event RSVPs:', rsvps);
+        
+            // All localStorage keys
+            console.log('All localStorage keys:', Object.keys(localStorage));
+        
+            return {
+                contactSubmissions: submissions,
+                newsletterSubscriptions: newsletters,
+                eventRSVPs: rsvps,
+                totalItems: Object.keys(localStorage).length
+            };
+        }
+
+        // Function to clear all form data (for testing)
+        function clearAllFormData() {
+            if (confirm('Are you sure you want to clear all stored form data? This cannot be undone.')) {
+                const keysToRemove = [];
+            
+                // Find all form-related keys
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.includes('contact_') || key.includes('newsletter_') || key.includes('rsvp_') || 
+                        key === 'formSubmissions' || key === 'newsletterSubscriptions' || key === 'eventRSVPs') {
+                        keysToRemove.push(key);
+                    }
+                }
+            
+                // Remove all form-related data
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+
+                alert(`Cleared ${keysToRemove.length} form data items from localStorage`);
+                console.log('Cleared keys:', keysToRemove);
+            }
+        }
+
+        // Add these functions to window for testing in console
+        window.viewAllSubmissions = viewAllSubmissions;
+        window.clearAllFormData = clearAllFormData;
     </script>
 </body>
 </html>
