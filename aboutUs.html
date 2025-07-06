@@ -688,29 +688,295 @@
 
     <script>
         // Shopping cart functionality
-        let cart = [];
+        let cart = JSON.parse(sessionStorage.getItem('bookHavenCart') || '[]');
 
-        function viewCart() {
+        // Load cart on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartFromStorage();
+            updateCartDisplay();
+        });
+
+        function loadCartFromStorage() {
+            try {
+                const storedCart = sessionStorage.getItem('bookHavenCart');
+                if (storedCart) {
+                    cart = JSON.parse(storedCart);
+                    console.log('Cart loaded from sessionStorage:', cart);
+                }
+            } catch (error) {
+                console.error('Error loading cart from sessionStorage:', error);
+                cart = [];
+            }
+        }
+
+        function saveCartToStorage() {
+            try {
+                sessionStorage.setItem('bookHavenCart', JSON.stringify(cart));
+                console.log('Cart saved to sessionStorage');
+            } catch (error) {
+                console.error('Error saving cart to sessionStorage:', error);
+            }
+        }
+
+        function addToCart(itemTitle, price) {
+            const item = {
+                id: Date.now() + Math.random(), // Unique ID for each item
+                title: itemTitle, 
+                price: price,
+                addedAt: new Date().toISOString(),
+                quantity: 1
+            };
+    
+            // Check if item already exists in cart
+            const existingItemIndex = cart.findIndex(cartItem => cartItem.title === itemTitle);
+    
+            if (existingItemIndex > -1) {
+                // Item exists, increase quantity
+                cart[existingItemIndex].quantity += 1;
+                alert(`"${itemTitle}" quantity increased to ${cart[existingItemIndex].quantity}`);
+            } else {
+                // New item, add to cart
+                cart.push(item);
+                alert(`"${itemTitle}" added to cart!`);
+            }
+    
+            saveCartToStorage();
+            updateCartDisplay();
+            console.log('Updated cart:', cart);
+        }
+
+        function removeFromCart(itemId) {
+            const itemIndex = cart.findIndex(item => item.id === itemId);
+            if (itemIndex > -1) {
+                const removedItem = cart.splice(itemIndex, 1)[0];
+                alert(`"${removedItem.title}" removed from cart`);
+                saveCartToStorage();
+                updateCartDisplay();
+        
+                // Close modal if cart is empty
+                if (cart.length === 0) {
+                    closeCartModal();
+                }
+            }
+        }
+
+        function updateItemQuantity(itemId, newQuantity) {
+            const itemIndex = cart.findIndex(item => item.id === itemId);
+            if (itemIndex > -1) {
+                if (newQuantity <= 0) {
+                    removeFromCart(itemId);
+                } else {
+                    cart[itemIndex].quantity = parseInt(newQuantity);
+                    saveCartToStorage();
+                    updateCartDisplay();
+                   showDetailedCart(); // Refresh the modal
+                }
+            }
+        }
+
+        function clearCart() {
+            if (cart.length === 0) {
+                alert('Your cart is already empty');
+                return;
+            }
+    
+            if (confirm('Are you sure you want to clear your cart? This action cannot be undone.')) {
+                cart = [];
+                sessionStorage.removeItem('bookHavenCart');
+                alert('Cart cleared successfully!');
+                updateCartDisplay();
+                closeCartModal();
+                console.log('Cart cleared');
+            }
+        }
+
+        function updateCartDisplay() {
+            const cartIcon = document.querySelector('.cart-icon');
+            if (cartIcon) {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+                if (totalItems > 0) {
+                    cartIcon.innerHTML = `🛒 Cart (${totalItems}) - $${totalPrice.toFixed(2)}`;
+                } else {
+                    cartIcon.innerHTML = '🛒 View Cart';
+                }
+            }
+        }
+
+        function showDetailedCart() {
             if (cart.length === 0) {
                 alert('Your cart is empty');
                 return;
             }
     
-            let cartContents = 'Your Cart:\n';
-            let total = 0;
+            let cartHTML = `
+                <div style="background: white; padding: 20px; border-radius: 10px; max-width: 600px; margin: 20px auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-height: 80vh; overflow-y: auto;">
+                    <h3 style="color: #2E2E4E; margin-bottom: 15px; text-align: center;">🛒 Shopping Cart</h3>
+            `;
     
+            let total = 0;
             cart.forEach((item, index) => {
-                cartContents += `${index + 1}. ${item.title} - $${item.price.toFixed(2)}\n`;
-                total += item.price;
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+        
+                cartHTML += `
+                    <div style="border-bottom: 1px solid #eee; padding: 15px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <strong style="color: #2E2E4E;">${item.title}</strong><br>
+                            <span style="color: #742C36; font-weight: bold;">$${item.price.toFixed(2)} each</span><br>
+                            <small style="color: #666;">Added: ${new Date(item.addedAt).toLocaleString()}</small>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                            <label style="font-size: 0.9em; color: #2E2E4E;">Qty:</label>
+                            <input type="number" value="${item.quantity}" min="1" max="99" 
+                                   onchange="updateItemQuantity('${item.id}', this.value)"
+                                   style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;">
+                            <span style="font-weight: bold; color: #2E2E4E; min-width: 80px;">$${itemTotal.toFixed(2)}</span>
+                            <button onclick="removeFromCart('${item.id}')" 
+                                    style="background: #742C36; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
+                        </div>
+                    </div>
+                `;
             });
     
-            cartContents += `\nTotal: $${total.toFixed(2)}`;
+            cartHTML += `
+                    <div style="margin-top: 20px; text-align: center; border-top: 2px solid #2E2E4E; padding-top: 15px;">
+                        <h4 style="color: #2E2E4E; margin: 10px 0;">Total Items: ${cart.reduce((sum, item) => sum + item.quantity, 0)}</h4>
+                        <h3 style="color: #742C36; margin: 10px 0;">Total: $${total.toFixed(2)}</h3>
+                    </div>
+                    <div style="margin-top: 20px; text-align: center; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="proceedToCheckout()" style="background: #3E5641; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px;">Checkout</button>
+                       <button onclick="clearCart()" style="background: #742C36; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px;">Clear Cart</button>
+                        <button onclick="closeCartModal()" style="background: #3F5461; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px;">Continue Shopping</button>
+                   </div>
+                </div>
+            `;
     
-            if (confirm(cartContents + '\n\nWould you like to proceed to checkout?')) {
-                alert('Thank you for your order!');
-                cart = [];
+            // Create modal overlay
+            const modal = document.createElement('div');
+            modal.id = 'cartModal';
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.7); z-index: 1000; display: flex; 
+                align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
+            `;
+            modal.innerHTML = cartHTML;
+    
+            document.body.appendChild(modal);
+    
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeCartModal();
+                }
+            });
+        }
+
+        function closeCartModal() {
+            const modal = document.getElementById('cartModal');
+            if (modal) {
+                modal.remove();
             }
         }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+    
+            // Create order object
+            const order = {
+                orderId: 'ORDER_' + Date.now(),
+                items: [...cart], // Copy cart items
+                totalItems: cart.reduce((sum, item) => sum + item.quantity, 0),
+                totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                orderDate: new Date().toISOString(),
+                status: 'completed'
+            };
+    
+            // Save completed order to localStorage
+            try {
+                let completedOrders = JSON.parse(localStorage.getItem('completedOrders') || '[]');
+                completedOrders.push(order);
+                localStorage.setItem('completedOrders', JSON.stringify(completedOrders));
+        
+                // Also save with unique key
+                localStorage.setItem(`order_${order.orderId}`, JSON.stringify(order));
+        
+                alert(`Thank you for your order! Order ID: ${order.orderId}\nTotal: $${order.totalAmount.toFixed(2)}\n\nYour order has been saved and will be processed within 24 hours.`);
+        
+                console.log('Order completed and saved:', order);
+        
+                // Clear current cart
+                cart = [];
+                sessionStorage.removeItem('bookHavenCart');
+                updateCartDisplay();
+                closeCartModal();
+        
+            } catch (error) {
+                console.error('Error saving order:', error);
+                alert('There was an error processing your order. Please try again.');
+            }
+        }
+
+        // View all cart and order data
+        function viewAllCartData() {
+            console.log('=== CART & ORDER DATA ===');
+    
+            // Current cart
+            console.log('Current Cart (sessionStorage):', cart);
+            console.log('Cart total items:', cart.reduce((sum, item) => sum + item.quantity, 0));
+            console.log('Cart total value:', cart.reduce((sum, item) => sum + (item.price * item.quantity), 0));
+    
+            // Completed orders
+            const orders = JSON.parse(localStorage.getItem('completedOrders') || '[]');
+            console.log('Completed Orders (localStorage):', orders);
+            console.log('Total completed orders:', orders.length);
+    
+            const totalSales = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+            console.log('Total sales amount:', totalSales);
+    
+            return {
+                currentCart: cart,
+                completedOrders: orders,
+                currentCartValue: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                totalOrdersValue: totalSales,
+                totalOrders: orders.length
+            };
+        }
+
+        function clearAllCartData() {
+            if (confirm('Clear ALL cart and order data? This includes current cart and order history. This cannot be undone.')) {
+                // Clear current cart
+                cart = [];
+                sessionStorage.removeItem('bookHavenCart');
+        
+                // Clear completed orders
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key === 'completedOrders' || key.startsWith('order_')) {
+                        keysToRemove.push(key);
+                    }
+                }
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+        
+                updateCartDisplay();
+                alert(`Cleared current cart and ${keysToRemove.length} order records`);
+                console.log('All cart and order data cleared');
+            }
+        }
+
+        // Simple cart view (for backward compatibility)
+        function viewCart() {
+            showDetailedCart();
+        }
+
+        // Make functions available globally
+        window.viewAllCartData = viewAllCartData;
+        window.clearAllCartData = clearAllCartData;
 
         // Wait for DOM to be fully loaded before setting up form
         document.addEventListener('DOMContentLoaded', function() {
