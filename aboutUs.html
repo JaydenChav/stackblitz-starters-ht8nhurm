@@ -467,7 +467,7 @@
     <header>
         <div class="header-container">
             <div class="logo">
-                <img src="images/Client3_ToteBag.png" alt="Book Haven Bookstore Logo">
+                <img src="images/Client3_LogoPalette1_EE583F.png" alt="Book Haven Bookstore Logo">
                 <span>Book Haven Bookstore</span>
             </div>
             <nav>
@@ -528,7 +528,7 @@
 
                 <h3>Contact Information</h3>
                 <ul class="contact-info">
-                    <li><span class="icon">📍</span> 123 Main Street, Your City, State 12345</li>
+                    <li><span class="icon">📍</span> 123 Main Street, Miami, FL 12345</li>
                     <li><span class="icon">📞</span> (555) 123-4567</li>
                     <li><span class="icon">✉️</span> info@bookhavenbookstore.com</li>
                     <li><span class="icon">🌐</span> www.bookhavenbookstore.com</li>
@@ -543,7 +543,7 @@
 
         <div class="form-section">
             <h2>Contact Us & Custom Orders</h2>
-            <form id="contactForm" action="#" method="post">
+            <form id="contactForm" action="#" method="post" novalidate>
                 <div class="form-grid">
                     <div class="form-column">
                         <div class="form-group">
@@ -553,12 +553,12 @@
 
                         <div class="form-group">
                             <label for="lastName">Last Name *</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name">
                         </div>
 
                         <div class="form-group">
                             <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com">
                         </div>
 
                         <div class="form-group">
@@ -568,7 +568,7 @@
 
                         <div class="form-group">
                             <label for="frequency">How many days per week do you visit the shop? *</label>
-                            <input type="number" id="frequency" name="frequency" min="0" max="7" placeholder="0-7" required>
+                            <input type="number" id="frequency" name="frequency" min="0" max="7" placeholder="0-7">
                         </div>
                     </div>
 
@@ -637,7 +637,7 @@
 
                 <div class="form-group full-width">
                     <label for="comments">Comments or Custom Order Details *</label>
-                    <textarea id="comments" name="comments" placeholder="Please provide details about your inquiry, custom order request, or feedback. For book requests, include title, author, and any specific edition preferences." required></textarea>
+                    <textarea id="comments" name="comments" placeholder="Please provide details about your inquiry, custom order request, or feedback. For book requests, include title, author, and any specific edition preferences."></textarea>
                 </div>
 
                 <div class="form-group full-width">
@@ -687,15 +687,8 @@
     </footer>
 
     <script>
-        // Simple shopping cart functionality
+        // Shopping cart functionality
         let cart = [];
-
-        function addToCart(itemTitle, price) {
-            cart.push({title: itemTitle, price: price});
-            alert(`"${itemTitle}" added to cart!`);
-            updateCartDisplay();
-            console.log('Current cart:', cart);
-        }
 
         function viewCart() {
             if (cart.length === 0) {
@@ -712,267 +705,165 @@
             });
     
             cartContents += `\nTotal: $${total.toFixed(2)}`;
-            cartContents += '\n\nOptions:';
-            cartContents += '\n• Click OK to proceed to checkout';
-            cartContents += '\n• Click Cancel to continue shopping';
-            cartContents += '\n• Use "Clear Cart" button to empty cart';
     
             if (confirm(cartContents + '\n\nWould you like to proceed to checkout?')) {
                 alert('Thank you for your order!');
-                clearCart();
-            }
-        }
-
-        function clearCart() {
-            if (cart.length === 0) {
-                alert('Your cart is already empty');
-                return;
-            }
-    
-            if (confirm('Are you sure you want to clear your cart? This action cannot be undone.')) {
                 cart = [];
-                alert('Cart cleared successfully!');
-                updateCartDisplay();
-                console.log('Cart cleared');
             }
         }
 
-        function removeFromCart(index) {
-            if (index >= 0 && index < cart.length) {
-                const removedItem = cart.splice(index, 1)[0];
-                alert(`"${removedItem.title}" removed from cart`);
-                updateCartDisplay();
-            }
-        }
-
-        function updateCartDisplay() {
-            // Update cart icon with item count
-            const cartIcon = document.querySelector('.cart-icon');
-            if (cartIcon) {
-                const itemCount = cart.length;
-                if (itemCount > 0) {
-                    cartIcon.innerHTML = `🛒 Cart (${itemCount})`;
-                } else {
-                    cartIcon.innerHTML = '🛒 View Cart';
-                }
-            }
-        }
-
-        // Advanced cart view with individual item management
-        function showDetailedCart() {
-            if (cart.length === 0) {
-                alert('Your cart is empty');
-                return;
-            }
-
-            let cartHTML = `
-                <div style="background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <h3 style="color: #2E2E4E; margin-bottom: 15px;">Shopping Cart</h3>
-            `;
-    
-            let total = 0;
-            cart.forEach((item, index) => {
-                total += item.price;
-                cartHTML += `
-                    <div style="border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <strong>${item.title}</strong><br>
-                            <span style="color: #742C36; font-weight: bold;">$${item.price.toFixed(2)}</span>
-                        </div>
-                        <button onclick="removeFromCart(${index})" style="background: #742C36; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
-                    </div>
-                `;
-            });
-    
-            cartHTML += `
-                    <div style="margin-top: 15px; text-align: center;">
-                        <strong style="font-size: 1.2em; color: #2E2E4E;">Total: $${total.toFixed(2)}</strong>
-                    </div>
-                    <div style="margin-top: 20px; text-align: center; display: flex; gap: 10px; justify-content: center;">
-                        <button onclick="proceedToCheckout()" style="background: #3E5641; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Checkout</button>
-                        <button onclick="clearCart()" style="background: #742C36; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Clear Cart</button>
-                        <button onclick="closeCartModal()" style="background: #3F5461; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Continue Shopping</button>
-                    </div>
-                </div>
-            `;
-    
-            // Create modal overlay
-            const modal = document.createElement('div');
-            modal.id = 'cartModal';
-            modal.style.cssText = `
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-                background: rgba(0,0,0,0.5); z-index: 1000; display: flex; 
-                align-items: center; justify-content: center;
-            `;
-            modal.innerHTML = cartHTML;
-
-            document.body.appendChild(modal);
-    
-            // Close modal when clicking outside
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    closeCartModal();
-                }
-            });
-        }
-
-        function closeCartModal() {
-            const modal = document.getElementById('cartModal');
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        function proceedToCheckout() {
-            alert('Thank you for your order!');
-            clearCart();
-            closeCartModal();
-        }
-
-        // Initialize cart display when page loads
+        // Wait for DOM to be fully loaded before setting up form
         document.addEventListener('DOMContentLoaded', function() {
-            updateCartDisplay();
-        });
-
-        // Form submission handling
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // Simple validation check
-            if (!data.lastName || !data.email || !data.frequency || !data.comments) {
-                alert('Please fill in all required fields (marked with *)');
-                return;
-            }
-            
-            // Simulate form submission
-            alert('Thank you for contacting us! We will respond to your inquiry within 24 hours.');
-            
-            // Reset form
-            this.reset();
-        });
-
-        // Real-time validation for number input
-        document.getElementById('frequency').addEventListener('input', function() {
-            const value = parseInt(this.value);
-            if (value < 0 || value > 7) {
-                this.setCustomValidity('Please enter a number between 0 and 7');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        // Contact Form Submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            console.log('DOM loaded, setting up form...');
     
-            // Get form data
-            const formData = new FormData(this);
-            const data = {};
+            // Get the form element
+            const contactForm = document.getElementById('contactForm');
     
-            // Convert FormData to regular object
-            for (let [key, value] of formData.entries()) {
-                if (key === 'interests') {
-                    // Handle multiple checkboxes
-                    if (!data[key]) data[key] = [];
-                    data[key].push(value);
-                } else {
-                    data[key] = value;
-                }
-            }
-    
-            // Add timestamp
-            data.submittedAt = new Date().toISOString();
-            data.submissionType = 'contact-form';
-    
-            // Simple validation check
-            if (!data.lastName || !data.email || !data.frequency || !data.comments) {
-                alert('Please fill in all required fields (marked with *)');
+            if (!contactForm) {
+                console.error('Contact form not found!');
                 return;
             }
     
-            // Store in localStorage
-            try {
-                // Get existing submissions or create empty array
-                let submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
+            // Remove ALL existing event listeners by cloning the form
+            const newForm = contactForm.cloneNode(true);
+            contactForm.parentNode.replaceChild(newForm, contactForm);
+    
+            // Set up the single, clean event listener
+            const cleanForm = document.getElementById('contactForm');
+    
+            cleanForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
         
-                // Add new submission
-                submissions.push(data);
+                console.log('Clean form submission triggered');
         
-                // Store back to localStorage
-                localStorage.setItem('formSubmissions', JSON.stringify(submissions));
+                // Get form data
+                const formData = new FormData(this);
+                const data = {};
         
-                // Also store this specific submission with a unique key
-                const submissionKey = `contact_${data.lastName}_${Date.now()}`;
-                localStorage.setItem(submissionKey, JSON.stringify(data));
-        
-                alert('Thank you for contacting us! Your submission has been saved. We will respond within 24 hours.');
-                console.log('Form data saved to localStorage:', data);
-        
-                // Reset form
-                this.reset();
-        
-            } catch (error) {
-                console.error('Error saving to localStorage:', error);
-                alert('There was an error saving your submission. Please try again.');
-            }
-        });
-
-        // Function to view all stored submissions (for testing/admin purposes)
-        function viewAllSubmissions() {
-            console.log('=== ALL STORED DATA ===');
-        
-            // Contact Form Submissions
-            const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
-            console.log('Contact Form Submissions:', submissions);
-        
-            // Newsletter Subscriptions
-            const newsletters = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
-            console.log('Newsletter Subscriptions:', newsletters);
-        
-            // Event RSVPs
-            const rsvps = JSON.parse(localStorage.getItem('eventRSVPs') || '[]');
-            console.log('Event RSVPs:', rsvps);
-        
-            // All localStorage keys
-            console.log('All localStorage keys:', Object.keys(localStorage));
-        
-            return {
-                contactSubmissions: submissions,
-                newsletterSubscriptions: newsletters,
-                eventRSVPs: rsvps,
-                totalItems: Object.keys(localStorage).length
-            };
-        }
-
-        // Function to clear all form data (for testing)
-        function clearAllFormData() {
-            if (confirm('Are you sure you want to clear all stored form data? This cannot be undone.')) {
-                const keysToRemove = [];
-            
-                // Find all form-related keys
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.includes('contact_') || key.includes('newsletter_') || key.includes('rsvp_') || 
-                        key === 'formSubmissions' || key === 'newsletterSubscriptions' || key === 'eventRSVPs') {
-                        keysToRemove.push(key);
+                // Convert FormData to regular object
+                for (let [key, value] of formData.entries()) {
+                    if (key === 'interests') {
+                        if (!data[key]) data[key] = [];
+                        data[key].push(value);
+                    } else {
+                        data[key] = value;
                     }
                 }
+        
+                // Add metadata
+                data.submittedAt = new Date().toISOString();
+                data.submissionType = 'contact-form';
+        
+                // Clean validation - trim whitespace
+                const lastName = (data.lastName || '').trim();
+                const email = (data.email || '').trim();
+                const frequency = (data.frequency || '').trim();
+                const comments = (data.comments || '').trim();
+        
+                // Validation checks
+                if (!lastName) {
+                    alert('Please enter your Last Name');
+                    document.getElementById('lastName').focus();
+                    return;
+                }
+        
+                if (!email) {
+                    alert('Please enter your Email Address');
+                    document.getElementById('email').focus();
+                    return;
+                }
+        
+                if (!frequency) {
+                    alert('Please enter how many days per week you visit the shop');
+                    document.getElementById('frequency').focus();
+                    return;
+               }
+        
+                if (!comments) {
+                    alert('Please enter your Comments or Custom Order Details');
+                    document.getElementById('comments').focus();
+                    return;
+               }
+        
+                // Store in localStorage
+                try {
+                    let submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
             
-                // Remove all form-related data
-                keysToRemove.forEach(key => localStorage.removeItem(key));
+                    const cleanData = {
+                        ...data,
+                        lastName: lastName,
+                        email: email,
+                        frequency: frequency,
+                       comments: comments
+                    };
+            
+                    submissions.push(cleanData);
+                    localStorage.setItem('formSubmissions', JSON.stringify(submissions));
+            
+                    const submissionKey = `contact_${lastName}_${Date.now()}`;
+                    localStorage.setItem(submissionKey, JSON.stringify(cleanData));
+            
+                    alert('Thank you for contacting us! Your submission has been saved. We will respond within 24 hours.');
+                    console.log('Form data saved successfully:', cleanData);
+            
+                    // Reset form
+                    this.reset();
+            
+                } catch (error) {
+                    console.error('Error saving to localStorage:', error);
+                    alert('There was an error saving your submission. Please try again.');
+                }
+            });
+    
+    console.log('Form setup complete - single event listener attached');
+});
 
-                alert(`Cleared ${keysToRemove.length} form data items from localStorage`);
-                console.log('Cleared keys:', keysToRemove);
+// Utility functions for localStorage management
+function viewAllSubmissions() {
+    console.log('=== ALL STORED DATA ===');
+    
+    const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
+    console.log('Contact Form Submissions:', submissions);
+    
+    const newsletters = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
+    console.log('Newsletter Subscriptions:', newsletters);
+    
+    const rsvps = JSON.parse(localStorage.getItem('eventRSVPs') || '[]');
+    console.log('Event RSVPs:', rsvps);
+    
+    console.log('All localStorage keys:', Object.keys(localStorage));
+    
+    return {
+        contactSubmissions: submissions,
+        newsletterSubscriptions: newsletters,
+        eventRSVPs: rsvps,
+        totalItems: Object.keys(localStorage).length
+    };
+}
+
+function clearAllFormData() {
+    if (confirm('Are you sure you want to clear all stored form data? This cannot be undone.')) {
+        const keysToRemove = [];
+        
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.includes('contact_') || key.includes('newsletter_') || key.includes('rsvp_') || 
+                key === 'formSubmissions' || key === 'newsletterSubscriptions' || key === 'eventRSVPs') {
+                keysToRemove.push(key);
             }
         }
+        
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        
+        alert(`Cleared ${keysToRemove.length} form data items from localStorage`);
+        console.log('Cleared keys:', keysToRemove);
+    }
+}
 
-        // Add these functions to window for testing in console
-        window.viewAllSubmissions = viewAllSubmissions;
-        window.clearAllFormData = clearAllFormData;
+// Make functions available globally
+window.viewAllSubmissions = viewAllSubmissions;
+window.clearAllFormData = clearAllFormData;
     </script>
 </body>
 </html>
